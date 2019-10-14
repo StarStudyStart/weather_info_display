@@ -37,8 +37,8 @@ def read_weather_info():
     if len(colls_name) == 0:
         # 启动爬虫，爬取并存放数据
         run_scrapy('weather')
-
-    colls_name = coll_names = db.list_collection_names(session=None)  # 重新获取
+        colls_name = coll_names = db.list_collection_names(session=None) # 重新获取
+      
     random_colls = random.choice(colls_name)
     print(random_colls+':')
     collection = db[random_colls]
@@ -46,7 +46,7 @@ def read_weather_info():
     return collection
     
 def data_handle(collection, flag=""):
-    """提取想要的数据信息"""
+    """提取数据信息"""
     highs = []
     lows = []
     dates = []
@@ -123,7 +123,7 @@ def write_to_xls(month_data, row_num=0):
             sheet.write(i, j, cell_data, style)
             #i = flag
         
-    f.save('单月天气情况.xls')
+    f.save('./单月天气情况.xls')
     
     
 def draw_line(dates, highs, lows):
@@ -152,14 +152,14 @@ if __name__=='__main__':
     month_data = data_handle(collection.find())
     
     #如果文件不存在直接写入数据，如果存在从已有文档后插入数据
-    if os.path.exists("单月天气情况.xls"):
-        write_to_xls(list(month_data)[:-1])
+    if os.path.exists("./单月天气情况.xls"):
+        write_to_xls(list(month_data))
     else:
-        #workbook = xlrd.open_workbook(r'.\单月天气情况.xls', 
+        #workbook = xlrd.open_workbook(r'./单月天气情况.xls', 
         #    encoding_override='gb2312')
         #table = workbook.sheet_by_name('sheet')
         #write_to_xls(list(month_data), table.nrows)
-        write_to_xls(list(month_data)[:-1])
+        write_to_xls(list(month_data))
         
     # 绘制图形
     month_data = data_handle(collection.find(), flag="draw")
